@@ -1,0 +1,15 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: |
+          g++ -O2 -std=c++17 -Wall -Wextra -Isrc src/main.cpp src/search.cpp src/specs.cpp -o bitopt
+          g++ -O2 -std=c++17 -Isrc tests/test_specs.cpp src/search.cpp src/specs.cpp -o test_specs
+      - name: Test
+        run: ./test_specs
+      - name: Smoke test
+        run: ./bitopt --spec abs
